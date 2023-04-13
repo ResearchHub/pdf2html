@@ -1,0 +1,98 @@
+cmake_minimum_required(VERSION 3.23.1 FATAL_ERROR)
+set(CMAKE_BUILD_TYPE Release CACHE STRING "Build configuration (Debug, Release, RelWithDebInfo, MinSizeRel)")
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+set(CMAKE_CXX_STANDARD 17)
+
+include(ExternalProject)
+project(pdf2htmllibs)
+
+set(FONTFORGE_VERSION 20220308)
+set(POPPLER_VERSION poppler-22.12.0)
+set(POPPLER_DATA_VERSION poppler-data-0.4.12)
+
+# download and build fontforge
+ExternalProject_Add(fontforge
+    PREFIX ${CMAKE_BINARY_DIR}
+    GIT_REPOSITORY https://github.com/fontforge/fontforge.git
+    GIT_TAG ${FONTFORGE_VERSION}
+    CMAKE_ARGS
+        -Wno-dev
+        -DCMAKE_CXX_FLAGS="-Wno-dev -Wno-devls"
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+        -DENABLE_GUI:BOOL=OFF
+        -DENABLE_X11:BOOL=OFF
+        -DENABLE_NATIVE_SCRIPTING:BOOL=ON
+        -DENABLE_PYTHON_SCRIPTING:BOOL=OFF
+        -DENABLE_PYTHON_EXTENSION:AUTO=OFF
+        -DENABLE_LIBSPIRO:BOOL=OFF
+        -DENABLE_LIBUNINAMESLIST:BOOL=OFF
+        -DENABLE_LIBGIF:AUTO=OFF
+        -DENABLE_LIBJPEG:AUTO=ON
+        -DENABLE_LIBPNG:AUTO=ON
+        -DENABLE_LIBREADLINE:AUTO=OFF
+        -DENABLE_LIBTIFF:AUTO=OFF
+        -DENABLE_WOFF2:AUTO=OFF
+        -DENABLE_DOCS:AUTO=OFF
+        -DENABLE_CODE_COVERAGE:BOOL=OFF
+        -DENABLE_DEBUG_RAW_POINTS:BOOL=OFF
+        -DENABLE_FONTFORGE_EXTRAS:BOOL=OFF
+        -DENABLE_MAINTAINER_TOOLS:BOOL=OFF
+        -DENABLE_TILE_PATH:BOOL=OFF
+        -DENABLE_WRITE_PFM:BOOL=OFF
+        -DENABLE_SANITIZER:ENUM=none
+        -DENABLE_FREETYPE_DEBUGGER:PATH=NO
+        -DSPHINX_USE_VENV:BOOL=OFF
+        -DREAL_TYPE:ENUM=double
+        -DTHEME:ENUM=tango
+)
+
+# download and build poppler
+ExternalProject_Add(poppler
+    PREFIX ${CMAKE_BINARY_DIR}
+    GIT_REPOSITORY https://github.com/freedesktop/poppler.git
+    GIT_TAG ${POPPLER_VERSION}
+    CMAKE_ARGS
+        -Wno-dev
+        -DCMAKE_CXX_FLAGS="-Wno-dev -Wno-devls"
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+        -DENABLE_UNSTABLE_API_ABI_HEADERS=OFF
+        -DBUILD_GTK_TESTS=OFF
+        -DBUILD_QT5_TESTS=OFF
+        -DBUILD_CPP_TESTS=OFF
+        -DENABLE_SPLASH=ON
+        -DENABLE_UTILS=OFF
+        -DENABLE_CPP=OFF
+        -DENABLE_GLIB=ON
+        -DENABLE_GOBJECT_INTROSPECTION=OFF
+        -DENABLE_GTK_DOC=OFF
+        -DENABLE_QT5=OFF
+        -DENABLE_LIBOPENJPEG=none
+        -DENABLE_CMS=none
+        -DENABLE_DCTDECODER=libjpeg
+        -DENABLE_LIBCURL=OFF
+        -DENABLE_ZLIB=ON
+        -DENABLE_ZLIB_UNCOMPRESS=OFF
+        -DUSE_FLOAT=OFF
+        -DBUILD_SHARED_LIBS=OFF
+        -DRUN_GPERF_IF_PRESENT=OFF
+        -DEXTRA_WARN=OFF
+        -DWITH_JPEG=ON
+        -DWITH_PNG=ON
+        -DWITH_TIFF=OFF
+        -DWITH_NSS3=OFF
+        -DWITH_Cairo=ON
+)
+
+# download and build poppler-data
+ExternalProject_Add(poppler-data
+    PREFIX ${CMAKE_BINARY_DIR}
+    URL https://poppler.freedesktop.org/${POPPLER_DATA_VERSION}.tar.gz
+    CMAKE_ARGS
+        -Wno-dev
+        -DCMAKE_CXX_FLAGS="-Wno-dev -Wno-devls"
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+)
