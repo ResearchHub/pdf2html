@@ -1,0 +1,22 @@
+{
+  "editor.formatOnSave": true,
+  // "explorer.excludeGitIgnore": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    // hide virtual environment
+    "**/.venv": true,
+    // hide lock files
+    "**/package-lock.json": true,
+    "**/poetry.lock": true
+  },
+  "python.formatting.provider": "black",
+  "yaml.format.enable": true,
+  "files.trimTrailingWhitespace": true,
+  "cmake.sourceDirectory": "${workspaceFolder}/pdf2html",
+  "cmake.configureOnOpen": false
+}

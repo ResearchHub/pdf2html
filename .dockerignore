@@ -1,0 +1,13 @@
+.git
+.gitignore
+.cache
+.editorconfig
+.vscode
+.venv
+
+Dockerfile
+docker-compose.yml
+
+build/
+dist/
+node_modules/
