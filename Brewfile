@@ -1,0 +1,7 @@
+tap "aws/tap"
+tap "homebrew/bundle"
+tap "homebrew/cask"
+tap "homebrew/core"
+brew "aws/tap/aws-sam-cli"
+brew "awscli"
+brew "go"

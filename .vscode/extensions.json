@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "bungcip.better-toml",
+    "editorconfig.editorconfig",
+    "golang.go",
+    "ms-vscode.cpptools",
+    "ms-vscode.cmake-tools",
+    "redhat.vscode-yaml",
+    "redhat.vscode-xml",
+    "twxs.cmake"
+  ]
+}
