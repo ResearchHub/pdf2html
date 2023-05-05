@@ -2,7 +2,7 @@
   "Pdf2HtmlFunction": {
     "AWS_ACCESS_KEY_ID": "minio",
     "AWS_SECRET_ACCESS_KEY": "qwerty123",
-    "AWS_REGION": "us-east-1",
+    "AWS_REGION": "us-west-2",
     "AWS_S3_ENDPOINT": "http://host.docker.internal:9000"
   }
 }

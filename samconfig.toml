@@ -17,6 +17,9 @@ capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
 resolve_image_repos = true
+s3_prefix = "pdf2html"
+region = "us-west-2"
+disable_rollback = true
 
 [default.package.parameters]
 resolve_s3 = true
@@ -26,10 +29,10 @@ watch = true
 
 [default.local_invoke]
 [default.local_invoke.parameters]
+region = "us-west-2"
 env_vars="locals.json"
 
 [default.local_start_lambda]
 [default.local_start_lambda.parameters]
 env_vars="locals.json"
 warm_containers = "EAGER"
-

@@ -1,6 +1,10 @@
 .PHONY: build.pdf2html
 build.pdf2html:
-	docker build -o - pdf2html > .build/pdf2html.docker.tar
+	docker build -o - pdf2html > .build/pdf2html.docker.tar -t pdf2html:latest
+
+.PHONY: build.pdf2html_x86
+build.pdf2html_x86:
+	docker buildx build --platform linux/amd64 -o - pdf2html > .build/pdf2html.docker.tar -t pdf2html:latest
 
 .PHONY: build
 build: build.pdf2html
@@ -17,6 +21,8 @@ start.lambda: build
 .PHONY: invoke
 invoke: build
 	echo '{ \
-		"s3_input": { "bucket_name": "pdf-uploads", "object_key": "s41551-022-00989-w.pdf" }, \
-		"s3_output": { "bucket_name": "pdf-uploads", "object_key": "s41551-022-00989-w.html" } \
-	}' | sam local invoke Pdf2HtmlFunction --event -
+		"s3_input": { "bucket_name": "test", "object_key": "2021.10.25.465725v1.full.pdf" }, \
+		"s3_output": { "bucket_name": "test", "object_key": "test.html" } \
+	}' | sam local invoke --env-vars locals.json Pdf2HtmlFunction --event -
+
+#echo '{"s3_input": { "bucket_name": "test", "object_key": "2021.10.25.465725v1.full.pdf" }, "s3_output": { "bucket_name": "test", "object_key": "test.html" }}'
