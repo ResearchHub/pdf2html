@@ -2,15 +2,15 @@ AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: Converts a PDF file from S3 to an HTML document
 
-Globals:
-  Function:
-    # Need to explicitly define the environment variables
-    Environment:
-      Variables:
-        AWS_ACCESS_KEY_ID:
-        AWS_SECRET_ACCESS_KEY:
-        AWS_REGION:
-        AWS_S3_ENDPOINT:
+# Globals:
+#   Function:
+#     # Need to explicitly define the environment variables
+#     Environment:
+#       Variables:
+#         AWS_ACCESS_KEY_ID:
+#         AWS_SECRET_ACCESS_KEY:
+#         AWS_REGION:
+#         AWS_S3_ENDPOINT:
 
 Resources:
   Pdf2HtmlFunction:

@@ -51,12 +51,6 @@ func HandleRequest(ctx context.Context, event Event) error {
 	// ensure response gets closed
 	defer res.Body.Close()
 
-	// ensure we are dealing with PDF content
-	err = validateFileType(res.Body, "application/pdf")
-	if err != nil {
-		return err
-	}
-
 	// create a temp file to copy the uploaded file to
 	tmpFile, err := os.CreateTemp("", "*.pdf")
 	if err != nil {
@@ -83,6 +77,18 @@ func HandleRequest(ctx context.Context, event Event) error {
 	// output the html to a temp file too
 	outFilePath := replaceExtension(tmpFilePath, ".html")
 	defer os.Remove(outFilePath)
+
+	// ensure we are dealing with PDF content
+	file, err := os.Open(tmpFilePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	err = validateFileType(file, "application/pdf")
+	if err != nil {
+		return err
+	}
 
 	// generate the html file
 	log.Println("converting:", tmpFilePath, outFilePath)

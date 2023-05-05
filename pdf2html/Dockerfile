@@ -38,3 +38,5 @@ COPY --from=builder /usr/local/share/pdf2html /usr/local/share/pdf2html
 COPY --from=builder /usr/local/bin/pdf2html /usr/local/bin
 COPY --from=builder /tmp/pdf2html/lib /usr/local/lib
 
+# This is for debugging
+# CMD [ "/bin/bash" ]

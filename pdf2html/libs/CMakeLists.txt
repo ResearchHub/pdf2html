@@ -51,7 +51,7 @@ ExternalProject_Add(fontforge
 # download and build poppler
 ExternalProject_Add(poppler
     PREFIX ${CMAKE_BINARY_DIR}
-    GIT_REPOSITORY https://github.com/freedesktop/poppler.git
+    GIT_REPOSITORY https://gitlab.freedesktop.org/poppler/poppler.git
     GIT_TAG ${POPPLER_VERSION}
     CMAKE_ARGS
         -Wno-dev
