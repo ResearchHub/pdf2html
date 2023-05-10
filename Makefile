@@ -7,7 +7,7 @@ build.pdf2html_x86:
 	docker buildx build --platform linux/amd64 -o - pdf2html > .build/pdf2html.docker.tar -t pdf2html:latest
 
 .PHONY: build
-build: build.pdf2html
+build: build.pdf2html_x86
 	sam build
 
 .PHONY: start.backend

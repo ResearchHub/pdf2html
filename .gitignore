@@ -206,6 +206,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # docker image build
-.build/
+# .build/*
 *.docker.tar
 *.docker.tar.gz

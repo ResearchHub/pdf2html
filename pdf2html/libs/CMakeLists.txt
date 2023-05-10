@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 17)
 include(ExternalProject)
 project(pdf2htmllibs)
 
-set(FONTFORGE_VERSION 20220308)
+set(FONTFORGE_VERSION 20230101)
 set(POPPLER_VERSION poppler-22.12.0)
 set(POPPLER_DATA_VERSION poppler-data-0.4.12)
 

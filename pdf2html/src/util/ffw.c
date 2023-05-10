@@ -72,7 +72,7 @@ void ffw_init(const char* progPath, int debug)
 {
     ffwSetAction("initialize");
     char *localProgPath = strdup(progPath);
-    FindProgDir(localProgPath);
+    // FindProgDir(localProgPath);
     InitSimpleStuff();
     if ( default_encoding==NULL )
         default_encoding=FindOrMakeEncoding("ISO8859-1");
