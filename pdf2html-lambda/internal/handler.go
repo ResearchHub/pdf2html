@@ -21,23 +21,23 @@ type Event struct {
 	S3Ouput S3Location `json:"s3_output"`
 }
 
-func HandleRequest(ctx context.Context, event Event) error {
+func HandleRequest(ctx context.Context, event Event) (bool, error) {
 	if event.S3Input.BucketName == "" {
-		return errors.New("input bucket name is required")
+		return false, errors.New("input bucket name is required")
 	}
 	if event.S3Input.ObjectKey == "" {
-		return errors.New("input object key is required")
+		return false, errors.New("input object key is required")
 	}
 	if event.S3Ouput.BucketName == "" {
-		return errors.New("output bucket name is required")
+		return false, errors.New("output bucket name is required")
 	}
 	if event.S3Ouput.ObjectKey == "" {
-		return errors.New("output object key is required")
+		return false, errors.New("output object key is required")
 	}
 
 	s3Client, err := getS3Client()
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	res, err := s3Client.GetObject(&s3.GetObjectInput{
@@ -45,7 +45,7 @@ func HandleRequest(ctx context.Context, event Event) error {
 		Key:    aws.String(event.S3Input.ObjectKey),
 	})
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// ensure response gets closed
@@ -54,7 +54,7 @@ func HandleRequest(ctx context.Context, event Event) error {
 	// create a temp file to copy the uploaded file to
 	tmpFile, err := os.CreateTemp("", "*.pdf")
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// remove the temp file when we are done
@@ -64,14 +64,14 @@ func HandleRequest(ctx context.Context, event Event) error {
 	// copy the file content to the temp file
 	n, err := io.Copy(tmpFile, res.Body)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// flush the temp file to disk
 	log.Printf("wrote %d bytes to file %s\n", n, tmpFilePath)
 	err = tmpFile.Sync()
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// output the html to a temp file too
@@ -81,26 +81,26 @@ func HandleRequest(ctx context.Context, event Event) error {
 	// ensure we are dealing with PDF content
 	file, err := os.Open(tmpFilePath)
 	if err != nil {
-		return err
+		return false, err
 	}
 	defer file.Close()
 
 	err = validateFileType(file, "application/pdf")
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// generate the html file
 	log.Println("converting:", tmpFilePath, outFilePath)
-	err = pdf2html(tmpFilePath, outFilePath)
+	pdf2htmlRes, err := pdf2html(tmpFilePath, outFilePath)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// open the generated file for reading
 	htmlFile, err := os.Open(outFilePath)
 	if err != nil {
-		return err
+		return false, err
 	}
 
 	// stream the generated output to s3
@@ -111,8 +111,8 @@ func HandleRequest(ctx context.Context, event Event) error {
 		Body:        htmlFile,
 	})
 	if err != nil {
-		return err
+		return false, err
 	}
 
-	return nil
+	return pdf2htmlRes, nil
 }
